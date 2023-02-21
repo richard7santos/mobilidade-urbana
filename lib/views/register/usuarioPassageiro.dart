@@ -13,11 +13,13 @@ class _PassageiroState extends State<Passageiro> {
   TextEditingController _controllerNome = TextEditingController();
   TextEditingController _controllerTelefone = TextEditingController();
   TextEditingController _controllerCep = TextEditingController();
-  TextEditingController _controllerEndereco = TextEditingController();
+  TextEditingController _controllerNumero = TextEditingController();
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerSenha = TextEditingController();
-  //bool _tipoUsuarioPassageiro = false;
-  String _resultado = "";
+  String _tipoUsuarioPassageiro = "Passageiro";
+  String _endereco = "";
+  String _numero = "";
+
 
   _buscarCep() async {
     String cep = _controllerCep.text;
@@ -27,12 +29,13 @@ class _PassageiroState extends State<Passageiro> {
     response = await http.get(url);
     Map<String, dynamic> retorno = json.decode(response.body);
     String logradouro = retorno["logradouro"];
-    String complemento = retorno["complemento"];
     String bairro = retorno["bairro"];
     String localidade = retorno["localidade"];
-    String ddd = retorno["ddd"];
+    String uf = retorno["uf"];
+    _numero = _controllerNumero.text;
 
-    _resultado = "${logradouro}, Nº... , Bairro: ${bairro} - ${localidade}";
+    _endereco = "${logradouro}, Nº ${_numero} - ${bairro} - ${localidade}/${uf}";
+
   }
 
   @override
@@ -45,90 +48,151 @@ class _PassageiroState extends State<Passageiro> {
         padding: EdgeInsets.all(20),
         child: Center(
             child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: TextField(
-                  controller: _controllerNome,
-                  autofocus: true,
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(fontSize: 20),
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
-                      hintText: "Nome completo",
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6))),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: TextField(
-                  controller: _controllerTelefone,
-                  keyboardType: TextInputType.phone,
-                  style: TextStyle(fontSize: 20),
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
-                      hintText: "Telefone",
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6))),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: TextField(
-                  controller: _controllerCep,
-                  keyboardType: TextInputType.number,
-                  style: TextStyle(fontSize: 20),
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
-                      hintText: "cep",
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6))),
-                ),
-              ), Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: TextField(
-                  controller: TextEditingController(text: "${_resultado}"),
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(fontSize: 20),
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
-                      hintText: "Endereço",
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6))),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16, bottom: 10),
-                child: ElevatedButton(
-                  child: Text(
-                    "Cadastrar",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  onPressed: _buscarCep,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Center(
-                  child: Text(
-                    "Todos os direitos reservados ${_resultado}",
-                    style: TextStyle(color: Colors.amberAccent),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: _controllerEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "E-mail",
+                        filled: true,
+                        fillColor: Color(0xFFe9e9e9) ,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6))),
                   ),
                 ),
-              )
-            ],
-          ),
-        )),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                    child: TextField(
+                    controller: _controllerSenha,
+                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "Senha",
+                        filled: true,
+                        fillColor: Color(0xFFe9e9e9),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6))),
+                  )
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: _controllerNome,
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "Nome completo",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6))),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: _controllerTelefone,
+                    keyboardType: TextInputType.phone,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "Telefone",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6))),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: _controllerCep,
+                    keyboardType: TextInputType.number,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "CEP",
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6))),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: _controllerNumero,
+                    keyboardType: TextInputType.number,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "Número",
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6))),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16, bottom: 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.amber
+                    ),
+                    child: Text(
+                      "Carregar Endereço",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: _buscarCep,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: TextEditingController(text: "${_endereco}"),
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "Endereço",
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6))),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(top: 16, bottom: 10),
+                  child: ElevatedButton(
+                    child: Text(
+                      "Cadastrar",
+                      style: TextStyle(color: Colors.white, fontSize: 20,),
+                    ),
+                    onPressed: (){},
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Center(
+                    child: Text(
+                      "Todos os direitos reservados",
+                      style: TextStyle(color: Colors.amberAccent),
+                    ),
+                  ),
+                )
+              ],
+            ),
+        ),
       ),
-    );
+    ));
   }
 }

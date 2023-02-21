@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.only(bottom: 10),
                 child: TextField(
                   controller: _controllerEmail,
-                  autofocus: true,
+                  //autofocus: true,
                   keyboardType: TextInputType.emailAddress,
                   style: TextStyle(fontSize: 20),
                   decoration: InputDecoration(
